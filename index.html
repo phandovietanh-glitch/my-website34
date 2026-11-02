@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Đội Thanh Niên Xung Kích Trường Đại Học Công Đoàn</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background-color: #f4f6f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .hidden {
+      display: none !important;
+    }
+
+/* TRANG 1: GIAO DIỆN CỬA SỔ TRUY CẬP */
+    #page-login {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #0056b3 url('https://lh3.googleusercontent.com/d/1y1p5s0efWIoYRcEHRae_G7jEAs32-pWw') no-repeat center center fixed;
+      background-size: contain;
+      position: relative;
+    }
+    .login-card {
+      position: relative;
+      z-index: 1;
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login-card h2 {
+      color: #0056b3;
+      margin-bottom: 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .login-card p {
+      color: #555;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background-color: #004085;
+    }
+
+    /* TRANG 2: MAIN APP & HEADER LOGOS */
+    .app-header {
+      background-color: #0056b3;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .header-logos {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .header-logo-img {
+      width: 34px;
+      height: 34px;
+      object-fit: cover; /* Giúp logo tràn đầy khung tròn */
+      border-radius: 50%;
+      background: white;
+      padding: 0; /* Xóa lề viền thừa */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .btn-secondary {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-block;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-secondary:hover {
+      background-color: #218838;
+    }
+    .btn-logout {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .main-container {
+      padding: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column; /* Xếp 2 ô nằm đè lên/dưới nhau */
+      gap: 10px;              /* Khoảng cách giữa 2 ô */
+      margin-bottom: 20px;
+    }
+    .controls input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 250px;           /* Chiều rộng bằng nhau */
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .data-table th, .data-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+    .data-table th {
+      background-color: #f8f9fa;
+      color: #333;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TRANG 1: CỬA SỔ TRUY CẬP -->
+  <div id="page-login">
+    <div class="login-card">
+      <img src="https://lh3.googleusercontent.com/d/1y1p5s0efWIoYRcEHRae_G7jEAs32-pWw" alt="Logo Đội TNXK" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 12px;">
+      <h2>ĐỘI THANH NIÊN XUNG KÍCH TRƯỜNG ĐẠI HỌC CÔNG ĐOÀN</h2>
+      <p>Tra cứu thông tin hoạt động</p>
+      <button onclick="accessApp()" class="btn-primary">Truy cập</button>
+    </div>
+  </div>
+
+  <!-- TRANG 2: MAIN APP -->
+  <div id="app-content" class="hidden">
+    <header class="app-header">
+      <div>
+        <h3 style="margin: 0;">Đội Thanh Niên Xung Kích</h3>
+      </div>
+      
+      <div class="header-right">
+        <div class="header-logos">
+          <!-- 1. Logo ĐH Công Đoàn -->
+          <img src="https://lh3.googleusercontent.com/d/1t3yVN7wQU8zSP4c0T5tt1NP7VxLnfkJF" alt="ĐH Công Đoàn" class="header-logo-img" title="Trường ĐH Công Đoàn">
+          
+          <!-- 2. Logo Đoàn TNCS HCM -->
+          <img src="https://lh3.googleusercontent.com/d/11WTGoy4FgQQ7yrloNxB7NJKvRs_9Q9EP" alt="Đoàn TNCS HCM" class="header-logo-img" title="Đoàn TNCS Hồ Chí Minh">
+          
+          <!-- 3. Logo Hội Sinh viên VN -->
+          <img src="https://lh3.googleusercontent.com/d/1WqGMK9n6ShkSlLGcPOehFAlXq8Ymp0i8" alt="Hội Sinh viên VN" class="header-logo-img" title="Hội Sinh viên Việt Nam">
+          
+          <!-- 4. Logo Đội TNXK -->
+          <img src="https://lh3.googleusercontent.com/d/1y1p5s0efWIoYRcEHRae_G7jEAs32-pWw" alt="Đội TNXK ĐH Công Đoàn" class="header-logo-img" title="Đội TNXK ĐH Công Đoàn">
+        </div>
+
+        <button onclick="openSheetProtected(event)" class="btn-secondary">➕ Nhập Dữ Liệu</button>
+        <button class="btn-logout" onclick="handleLogout()">Thoát</button>
+      </div>
+    </header>
+
+    <main class="main-container">
+      <div class="controls">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm tên thành viên..." oninput="filterData()">
+        <input type="text" id="programSearchInput" placeholder="Tìm kiếm tên chương trình..." oninput="filterData()">
+      </div>
+      <div id="loading-spinner" style="text-align: center; padding: 20px; font-weight: bold; color: #0056b3;">
+        Đang tải dữ liệu từ máy chủ...
+      </div>
+
+      <table class="data-table hidden" id="dataTable">
+        <thead>
+          <tr>
+            <th>Họ và Tên</th>
+            <th>Nhóm</th>
+            <th>Tổ</th>
+            <th>Lớp</th>
+            <th>Số buổi tham gia</th>
+            <th>Tên chương trình & ngày tham gia</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_bu7l8uFkY4TdcD9qDpCpsBf3jpiYwwAabqWVJCQ76bIStYfpR0Q7U2XUulGQLUyCnA/exec";
+
+    let globalActivities = [];
+
+    // Chuyển trực tiếp từ Trang 1 vào Trang 2 khi bấm "Truy cập"
+    function accessApp() {
+      document.getElementById("page-login").classList.add("hidden");
+      document.getElementById("app-content").classList.remove("hidden");
+      loadData();
+    }
+
+    // Nút Thoát để trở về màn hình Trang 1
+    function handleLogout() {
+      document.getElementById("app-content").classList.add("hidden");
+      document.getElementById("page-login").classList.remove("hidden");
+    }
+
+    // Mở trang Nhập Dữ Liệu bằng mật khẩu từ ô A2 tab TaiKhoan trên Google Sheet
+    async function openSheetProtected(event) {
+      if (event) event.preventDefault();
+      const inputPass = prompt("Vui lòng nhập mật khẩu quản trị để mở trang Nhập Dữ Liệu:");
+      if (inputPass === null || inputPass.trim() === "") return;
+
+      try {
+        const requestUrl = `${GOOGLE_SCRIPT_URL}?action=verifyDataPass&pass=${encodeURIComponent(inputPass.trim())}&_t=${Date.now()}`;
+        const response = await fetch(requestUrl);
+        const result = await response.json();
+
+        if (result.status === "success") {
+          window.open("https://docs.google.com/spreadsheets/d/1Psj0bM_6jduJiAFUrEECvfk7dU-UALBZBYvueTyLcmQ/edit?usp=sharing", "_blank");
+        } else {
+          alert("Mật khẩu không đúng! Bạn không có quyền truy cập trang Nhập Dữ Liệu.");
+        }
+      } catch (error) {
+        console.error("Lỗi xác thực mật khẩu:", error);
+        alert("Không thể kết nối đến máy chủ để xác thực mật khẩu!");
+      }
+    }
+
+    // Tải dữ liệu từ Google Sheet
+    async function loadData() {
+      const spinner = document.getElementById("loading-spinner");
+      const table = document.getElementById("dataTable");
+      spinner.style.display = "block";
+      table.classList.add("hidden");
+
+      try {
+        const response = await fetch(`${GOOGLE_SCRIPT_URL}?_t=${Date.now()}`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+          globalActivities = result.data || [];
+          renderTable(globalActivities); // Đã loại bỏ gọi hàm populateClassFilter gây lỗi
+        }
+      } catch (err) {
+        console.error("Lỗi tải dữ liệu:", err);
+      } finally {
+        spinner.style.display = "none";
+        table.classList.remove("hidden");
+      }
+    }
+
+    // Đổ dữ liệu ra bảng
+    function renderTable(data) {
+      const tbody = document.getElementById("tableBody");
+      tbody.innerHTML = "";
+
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Không tìm thấy dữ liệu.</td></tr>`;
+        return;
+      }
+
+      data.forEach(item => {
+        let progText = "";
+        if (item.program && item.program != "0") {
+          progText = String(item.program).replace(/\n/g, '<br>');
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${item.name || ''}</td>
+          <td>${item.doi || ''}</td>
+          <td>${item.to || ''}</td>
+          <td>${item.lop || ''}</td>
+          <td>${item.joined || 0}</td>
+          <td>${progText}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+    // Bộ lọc tìm kiếm kết hợp Tên thành viên và Tên chương trình
+    function filterData() {
+      const nameVal = document.getElementById("searchInput").value.toLowerCase().trim();
+      const programVal = document.getElementById("programSearchInput").value.toLowerCase().trim();
+
+      const filtered = globalActivities.filter(item => {
+        const matchesName = (item.name || '').toLowerCase().includes(nameVal);
+        const matchesProgram = (item.program || '').toLowerCase().includes(programVal);
+        return matchesName && matchesProgram;
+      });
+      renderTable(filtered);
+    }
+  </script>
+</body>
+</html>
